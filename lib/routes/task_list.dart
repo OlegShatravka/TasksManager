@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../widgets/task_cell.dart';
+import 'package:practice_2/widgets/task_cell.dart';
 
 class TaskList extends StatefulWidget {
   @override
@@ -9,10 +9,15 @@ class TaskList extends StatefulWidget {
 
 class _TaskListState extends State<TaskList> {
   final TextEditingController _textFieldController = TextEditingController();
-  final List<String> _list = ['Read lection', 'Think about it', 'Do homework'];
+  final _list = <String>['Read lection', 'Think about it', 'Do homework'];
+
+  void dismissAlert(BuildContext context) {
+    Navigator.of(context).pop();
+    _textFieldController.clear();
+  }
 
   void _addNewItem(BuildContext context) {
-    showDialog<Widget>(
+    showDialog<void>(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
@@ -28,9 +33,7 @@ class _TaskListState extends State<TaskList> {
                   'Cancel',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
                 ),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
+                onPressed: () => dismissAlert(context),
               ),
               FlatButton(
                 textTheme: ButtonTextTheme.accent,
@@ -42,10 +45,9 @@ class _TaskListState extends State<TaskList> {
                   setState(() {
                     if (_textFieldController.text.isNotEmpty) {
                       _list.add(_textFieldController.text);
-                      _textFieldController.clear();
                     }
                   });
-                  Navigator.of(context).pop();
+                  dismissAlert(context);
                 },
               )
             ],
@@ -63,9 +65,7 @@ class _TaskListState extends State<TaskList> {
           return TaskCell(
             title: _list[index],
             onPressed: () {
-              setState(() {
-                _list.removeAt(index);
-              });
+              setState(() => _list.removeAt(index));
             },
           );
         },
